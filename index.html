@@ -51,12 +51,14 @@
             min-height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
 
         h1 {
-            font-size: larger;
+            font-size: 2rem;
             text-align: center;
             padding: 50px;
+            color: #333;
         }
 
         .video-container {
@@ -67,6 +69,7 @@
             border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             animation: pulse 2s infinite;
+            margin-bottom: 20px;
         }
 
         .video-container video {
@@ -91,7 +94,49 @@
         }
 
         .form-container {
+            width: 80%;
+            max-width: 600px;
             margin: 20px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
         }
 
         .opinions-container {
@@ -107,12 +152,16 @@
         .opinions-container h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #333;
         }
 
         .opinion {
             margin-bottom: 10px;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            font-size: 1rem;
+            color: #555;
         }
     </style>
 </head>
@@ -121,5 +170,52 @@
     <div class="video-container">
         <video src="./mama-pls.mp4" controls></video>
     </div>
+
+    <div class="form-container">
+        <h2>Share your opinion</h2>
+        <form id="opinionForm">
+            <input type="text" id="opinionInput" placeholder="Your opinion" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="opinions-container">
+        <h2>Opinions</h2>
+        <div id="opinionsList"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load opinions from local storage
+            const opinions = JSON.parse(localStorage.getItem('opinions')) || [];
+            const opinionsList = document.getElementById('opinionsList');
+
+            opinions.forEach(opinion => {
+                const opinionDiv = document.createElement('div');
+                opinionDiv.classList.add('opinion');
+                opinionDiv.textContent = opinion;
+                opinionsList.appendChild(opinionDiv);
+            });
+
+            // Handle form submission
+            document.getElementById('opinionForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const opinionInput = document.getElementById('opinionInput');
+                const opinionText = opinionInput.value.trim();
+
+                if (opinionText !== '') {
+                    opinions.push(opinionText);
+                    localStorage.setItem('opinions', JSON.stringify(opinions));
+
+                    const newOpinion = document.createElement('div');
+                    newOpinion.classList.add('opinion');
+                    newOpinion.textContent = opinionText;
+                    opinionsList.appendChild(newOpinion);
+
+                    opinionInput.value = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
